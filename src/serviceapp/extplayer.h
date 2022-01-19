@@ -296,8 +296,8 @@ public:
 		pCurrentVideo(NULL),
 		pCurrentSubtitle(NULL),
 		pErrorMessage(NULL),
-		mMessageMain(eApp, 1),
-		mMessageThread(this, 1),
+		mMessageMain(eApp, 1, "serviceapp - extplayer"),
+		mMessageThread(this, 1, "serviceapp - extplayer"),
 		mTimerDelay(100), // updated play position timer
 		mWaitForUpdate(false),
 		mWaitForStop(false)

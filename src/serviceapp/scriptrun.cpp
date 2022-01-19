@@ -75,8 +75,8 @@ ResolveUrl::ResolveUrl(const std::string &url):
     m_success(0),
     mStopped(false),
     mThreadRunning(false),
-    mMessageMain(eApp, 1),
-    mMessageThread(this, 1)
+    mMessageMain(eApp, 1, "serviceapp - scriptrun"),
+    mMessageThread(this, 1, "serviceapp - scriptrun")
 {
     eDebug("ResolveUrl::ResolveUrl %s", url.c_str());
     CONNECT(mMessageThread.recv_msg, ResolveUrl::gotMessage);
