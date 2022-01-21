@@ -293,6 +293,7 @@ void eConsoleContainer::readyWrite(int what)
         queue_data &d = outbuf.front();
         int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
         if (wr < 0)
+        {
             close(filefd[0]);
             filefd[0] = -1;
             ::close(fd[1]);
@@ -300,6 +301,7 @@ void eConsoleContainer::readyWrite(int what)
             fd[1]=-1;
             dataSent(0);
             out->stop();
+        }            
         else
             d.dataSent += wr;
         if (d.dataSent == d.len)
