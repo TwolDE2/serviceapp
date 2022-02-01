@@ -29,10 +29,10 @@ struct eServiceAppOptions
 	{};
 };
 
-#if SIGCXX_MAJOR_VERSION == 2
+#if SIGCXX_MAJOR_VERSION == 3
 class eServiceApp: public sigc::trackable,
 #else
-class eServiceApp: public Object,
+class eServiceApp: public sigc::trackable,
 #endif
 	public iPlayableService, public iPauseableService, public iSeekableService, public iStreamedService,
 	public iAudioChannelSelection, public iAudioTrackSelection,  public iSubtitleOutput, public iSubserviceList, public iServiceInformation
@@ -46,10 +46,10 @@ class eServiceApp: public Object,
 	bool m_subservices_checked;
 	void fillSubservices();
 
-#if SIGCXX_MAJOR_VERSION == 2
-	sigc::signal2<void,iPlayableService*,int> m_event;
+#if SIGCXX_MAJOR_VERSION == 3
+	sigc::signal<void(iPlayableService*,int)> m_event;
 #else
-	Signal2<void,iPlayableService*,int> m_event;
+	sigc::signal2<void,iPlayableService*,int> m_event;
 #endif
 	eServiceAppOptions *options;
 	PlayerBackend *player;
@@ -104,10 +104,10 @@ public:
 	~eServiceApp();
 
 	// iPlayableService
-#if SIGCXX_MAJOR_VERSION == 2
-	RESULT connectEvent(const sigc::slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection);
+#if SIGCXX_MAJOR_VERSION == 3
+	RESULT connectEvent(const sigc::slot<void(iPlayableService*,int)> &event, ePtr<eConnection> &connection);
 #else
-	RESULT connectEvent(const Slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection);
+	RESULT connectEvent(const sigc::slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection);
 #endif
 	RESULT start();
 	RESULT stop();
