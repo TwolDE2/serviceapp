@@ -18,10 +18,10 @@ struct queue_data
     int dataSent;
 };
 
-#if SIGCXX_MAJOR_VERSION == 3
+#if SIGCXX_MAJOR_VERSION >= 2
 class eConsoleContainer: public sigc::trackable, public iObject
 #else
-class eConsoleContainer: public sigc::trackable, public iObject
+class eConsoleContainer: public Object, public iObject
 #endif
 {
     DECLARE_REF(eConsoleContainer);

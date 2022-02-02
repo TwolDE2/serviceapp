@@ -8,6 +8,7 @@ AC_PROG_CXX
 AM_PATH_PYTHON
 AX_PYTHON_DEVEL
 AC_LANG(C++)
+
 PKG_CHECK_MODULES(ENIGMA2, enigma2)
 PKG_CHECK_MODULES(UCHARDET, uchardet)
 PKG_CHECK_MODULES(OPENSSL, openssl)
@@ -23,6 +24,8 @@ else
     echo " Building a serviceapp without EPG support "
     echo "-------------------------------------------"
 fi
+
+AX_CXX_COMPILE_STDCXX_17([ext],[mandatory])
 
 AC_DEFINE([DEBUG])
 
@@ -41,9 +44,11 @@ AC_LINK_IFELSE(
     void Release(){}
 
 #if SIGCXX_MAJOR_VERSION == 3
-    RESULT connectEvent(const sigc::slot<void,iPlayableService*,int> &event, ePtr<eConnection> &connection){return -1;}
-#else
+    RESULT connectEvent(const sigc::slot<void(iPlayableService*,int)> &event, ePtr<eConnection> &connection){return -1;}
+#elif SIGCXX_MAJOR_VERSION == 2
     RESULT connectEvent(const sigc::slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection){return -1;}
+#else
+    RESULT connectEvent(const Slot2<void,iPlayableService*,int> &event, ePtr<eConnection> &connection){return -1;}
 #endif
     RESULT start(){return -1;}
     RESULT stop(){return -1;}

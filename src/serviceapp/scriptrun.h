@@ -9,10 +9,10 @@
 #include "extplayer.h"
 #include "myconsole.h"
 
-#if SIGCXX_MAJOR_VERSION == 3
+#if SIGCXX_MAJOR_VERSION >= 2
 class scriptrun: public sigc::trackable
 #else
-class scriptrun: public sigc::trackable
+class scriptrun: public Object
 #endif
 {
     std::vector<std::string> m_params;
@@ -38,10 +38,10 @@ public:
 };
 
 
-#if SIGCXX_MAJOR_VERSION == 3
+#if SIGCXX_MAJOR_VERSION >= 2
 class ResolveUrl: public sigc::trackable, public eThread, public eMainloop
 #else
-class ResolveUrl: public sigc::trackable, public eThread, public eMainloop
+class ResolveUrl: public Object, public eThread, public eMainloop
 #endif
 {
     struct Message
@@ -85,9 +85,11 @@ public:
 
     void scriptEnded(int retval);
 #if SIGCXX_MAJOR_VERSION == 3
+    sigc::signal<void(int)> urlResolved;
+#elif SIGCXX_MAJOR_VERSION == 2
     sigc::signal1<void,int> urlResolved;
 #else
-    sigc::signal1<void,int> urlResolved;
+    Signal1<void, int> urlResolved;
 #endif
 };
 
