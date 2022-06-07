@@ -1,6 +1,6 @@
 #ifndef __extplayer_h
 #define __extplayer_h
-#define HAVE_HISILICON
+
 #include <lib/base/ebase.h>
 #include <lib/base/thread.h>
 #include <lib/python/connections.h>
