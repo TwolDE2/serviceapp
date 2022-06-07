@@ -224,20 +224,20 @@ int PlayerBackend::start(const std::string& path, const std::map<std::string,std
 }
 int PlayerBackend::stop()
 {
-//	if (mThreadRunning)
-//	{
-//		// wait 10 seconds for normal exit if timed out then kill process
-//		mWaitForStop = true;
-//		// WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 10000);
-//		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 3000);		
-//		t.run();
-//		mMessageThread.send(Message(Message::tStop));
-//		t.kill();
-//		if (t.isTimedOut())
-//		{
-//			mMessageThread.send(Message(Message::tKill));
-//		}
-//	}
+	if (mThreadRunning)
+	{
+		// wait 10 seconds for normal exit if timed out then kill process
+		mWaitForStop = true;
+		// WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 10000);
+		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 3000);
+		t.run();
+		mMessageThread.send(Message(Message::tStop));
+		t.kill();
+		if (t.isTimedOut())
+		{
+			mMessageThread.send(Message(Message::tKill));
+		}
+	}
 	kill();
 	return 0;
 }
