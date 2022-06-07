@@ -1,6 +1,6 @@
 #ifndef SCRIPTRUN_H
 #define SCRIPTRUN_H
-
+#define HAVE_HISILICON
 #include <lib/base/ebase.h>
 #include <lib/python/connections.h>
 #include <lib/base/thread.h>

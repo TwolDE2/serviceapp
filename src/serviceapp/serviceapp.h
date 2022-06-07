@@ -1,6 +1,6 @@
 #ifndef __serviceapp_h
 #define __serviceapp_h
-
+#define HAVE_HISILICON
 #include <limits>
 #include <lib/service/iservice.h>
 #include <lib/base/ebase.h>
