@@ -42,7 +42,7 @@ class eServiceApp: public sigc::trackable,
 	bool m_subservices_checked;
 	void fillSubservices();
 
-	sigc::signal<void(iPlayableService*, int) > m_event;
+	sigc::signal<void(iPlayableService*, int)> m_event;
 	eServiceAppOptions *options;
 	PlayerBackend *player;
 	BasePlayer *extplayer;
@@ -96,7 +96,7 @@ public:
 	~eServiceApp();
 
 	// iPlayableService
-	RESULT connectEvent(const sigc::slot<void(iPlayableService*, int) > &event, ePtr<eConnection> &connection);
+	RESULT connectEvent(const sigc::slot<void(iPlayableService*, int)> &event, ePtr<eConnection> &connection);
 	RESULT start();
 	RESULT stop();
 #if OPENPLI_ISERVICE_VERSION > 1
