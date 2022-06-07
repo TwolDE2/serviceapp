@@ -229,7 +229,7 @@ int PlayerBackend::stop()
 		// wait 10 seconds for normal exit if timed out then kill process
 		mWaitForStop = true;
 		// WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 10000);
-		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 2000);		
+		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 2750);		
 		t.run();
 		mMessageThread.send(Message(Message::tStop));
 		t.kill();
