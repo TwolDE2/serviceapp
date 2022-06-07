@@ -1,4 +1,3 @@
-#define HAVE_HISILICON
 #ifndef __lib_base_message_h
 #define __lib_base_message_h
 
