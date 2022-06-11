@@ -672,7 +672,7 @@ void eServiceApp::gotExtPlayerMessage(int message)
 
 
 // __iPlayableService
-RESULT eServiceApp::connectEvent(const sigc::slot<void(iPlayableService*, int) >& event, ePtr< eConnection >& connection)
+RESULT eServiceApp::connectEvent(const sigc::slot<void(iPlayableService*,int)>& event, ePtr< eConnection >& connection)
 {
 	connection = new eConnection((iPlayableService*)this, m_event.connect(event));
 	return 0;
@@ -1700,7 +1700,8 @@ static struct PyModuleDef moduledef = {
 	NULL,                /* m_free */
 };
 
-PyMODINIT_FUNC PyInit_serviceapp(void)
+PyMODINIT_FUNC
+PyInit_serviceapp(void)
 {
 	g_GstPlayerOptionsServiceMP3 = new GstPlayerOptions();
 	g_GstPlayerOptionsServiceGst = new GstPlayerOptions();
