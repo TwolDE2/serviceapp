@@ -164,7 +164,7 @@ void WaitThread::thread()
 		perror("WaitThread - cannot get clock:");
 		goto unlock;
 	}
-	ts.tv_sec += timeout / 1000;
+	ts.tv_sec += timeout // 1000;
 	ts.tv_nsec += (timeout % 1000) * 1000000;
 	eDebug("WaitThread - waiting for %ldms", timeout);
 	if (pthread_cond_timedwait(&cond, &mutex, &ts) == ETIMEDOUT)
@@ -229,7 +229,7 @@ int PlayerBackend::stop()
 		// wait 10 seconds for normal exit if timed out then kill process
 		mWaitForStop = true;
 		// WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 10000);
-		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 3000);
+		WaitThread t(mWaitForStopMutex, mWaitForStopCond, mWaitForStop, 500);
 		t.run();
 		mMessageThread.send(Message(Message::tStop));
 		t.kill();

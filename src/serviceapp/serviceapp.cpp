@@ -878,7 +878,7 @@ RESULT eServiceApp::isCurrentlySeekable()
 int eServiceApp::getNumberOfTracks()
 {
 	eDebug("eServiceApp::getNumberOfTracks");
-	return player->audioGetNumberOfTracks(500);
+	return player->audioGetNumberOfTracks(100);
 }
 
 RESULT eServiceApp::selectTrack(unsigned int i)
@@ -1056,7 +1056,7 @@ RESULT eServiceApp::getSubtitleList(std::vector<struct SubtitleTrack> &subtitlel
 {
 	m_subtitle_tracks.clear();
 	m_subtitle_streams.clear();
-	int embedded_track_num = player->subtitleGetNumberOfTracks(500);
+	int embedded_track_num = player->subtitleGetNumberOfTracks(100);
 	eDebug("eServiceApp::getSubtitleList - found embedded tracks (%d)", embedded_track_num);
 	int pid = 0;
 	for (; pid < embedded_track_num; pid++)
