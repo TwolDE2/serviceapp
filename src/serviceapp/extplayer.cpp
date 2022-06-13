@@ -432,9 +432,11 @@ void PlayerBackend::gotMessage(const PlayerBackend::Message& message)
 			break;
 		case Message::tStop:
 			eDebug("PlayerBackend::gotMessage - tStop");
-			mTimer->stop();
-			pPlayer->sendStop();
-			break;
+			pPlayer->sendForceStop();
+			break;			
+//			mTimer->stop();
+//			pPlayer->sendStop();
+//			break;
 		case Message::tKill:
 			eDebug("PlayerBackend::gotMessage - tKill");
 			pPlayer->sendForceStop();
