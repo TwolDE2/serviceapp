@@ -164,7 +164,7 @@ void WaitThread::thread()
 		perror("WaitThread - cannot get clock:");
 		goto unlock;
 	}
-	ts.tv_sec += timeout // 1000;
+	ts.tv_sec += timeout / 1000;
 	ts.tv_nsec += (timeout % 1000) * 1000000;
 	eDebug("WaitThread - waiting for %ldms", timeout);
 	if (pthread_cond_timedwait(&cond, &mutex, &ts) == ETIMEDOUT)
