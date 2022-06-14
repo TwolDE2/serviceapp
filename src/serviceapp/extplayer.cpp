@@ -433,10 +433,7 @@ void PlayerBackend::gotMessage(const PlayerBackend::Message& message)
 		case Message::tStop:
 			eDebug("PlayerBackend::gotMessage - tStop");
 			pPlayer->sendForceStop();
-			break;			
-//			mTimer->stop();
-//			pPlayer->sendStop();
-//			break;
+			break;
 		case Message::tKill:
 			eDebug("PlayerBackend::gotMessage - tKill");
 			pPlayer->sendForceStop();
