@@ -285,8 +285,8 @@ void eConsoleContainer::readyErrRead(int what)
 			for ( int i = 0; i < rd; i++ )
 				eDebug("[ServiceApp][eConsoleContainer] %d = %c (%02x)", i, buf[i], buf[i] );
 			buf[rd]=0;
-			/*emit*/ dataAvail(std::make_pair(buf, rd));
-			stderrAvail(std::make_pair(buf, rd));
+			/*emit*/ dataAvail(buf);
+			stderrAvail(buf);
 		}
 	}
 }
