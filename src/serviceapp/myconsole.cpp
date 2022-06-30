@@ -307,7 +307,13 @@ void eConsoleContainer::readyWrite(int what)
 		queue_data &d = outbuf.front();
 		int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
 		if (wr < 0)
-			eDebug("[eConsoleAppContainer] write on fd=%d failed: %m", fd[1]);
+		{
+			eDebug("[ServiceApp][eConsoleContainer] write on fd=%d failed: %m", fd[1]);
+			outbuf.pop();
+			delete [] d.data;
+			if ( filefd[0] == -1 )
+			/* emit */ dataSent(0);
+		}			
 		else
 			d.dataSent += wr;
 		if (d.dataSent == d.len)
@@ -331,7 +337,7 @@ void eConsoleContainer::readyWrite(int what)
 				close(filefd[0]);
 				filefd[0] = -1;
 				::close(fd[1]);
-				eDebug("[eConsoleAppContainer] readFromFile done - closing stdin pipe");
+				eDebug("[ServiceApp][eConsoleContainer] readFromFile done - closing stdin pipe");
 				fd[1]=-1;
 				dataSent(0);
 				out->stop();
