@@ -247,7 +247,7 @@ eServiceApp::~eServiceApp()
 	delete options;
 	delete player;
 	delete extplayer;
-	delete m_resolver;
+//	delete m_resolver;
 
 	if (m_subtitle_widget) m_subtitle_widget->destroy();
 	m_subtitle_widget = 0;
