@@ -116,17 +116,17 @@ int eConsoleContainer::execute(eMainloop *context, const char *cmdline, const ch
 	pid = bidirpipe(fd, cmdline, argv, m_cwd.empty() ? 0 : m_cwd.c_str());
 
 	if ( pid == -1 ) {
-		eDebug("[eConsoleAppContainer] failed to start %s", cmdline);
+		eDebug("[ServiceApp][eConsoleContainer] failed to start %s", cmdline);
 		return -3;
 	}
 
-	eDebug("pipe in = %d, out = %d, err = %d", fd[0], fd[1], fd[2]);
-
+	eDebug("[ServiceApp][eConsoleContainer] pipe in = %d, out = %d, err = %d", fd[0], fd[1], fd[2]);
+	int flags = fcntl(fd[1], F_GETFL, 0);
 	::fcntl(fd[0], F_SETFL, O_NONBLOCK);
-	::fcntl(fd[1], F_SETFL, O_NONBLOCK);
+	::fcntl(fd[1], F_SETFL, flags | O_NONBLOCK);
 	::fcntl(fd[2], F_SETFL, O_NONBLOCK);
 	in = eSocketNotifier::create(context, fd[0], eSocketNotifier::Read|eSocketNotifier::Priority|eSocketNotifier::Hungup );
-	out = eSocketNotifier::create(context, fd[1], eSocketNotifier::Write, false);  
+	out = eSocketNotifier::create(context, fd[1], eSocketNotifier::Write, false);
 	err = eSocketNotifier::create(context, fd[2], eSocketNotifier::Read|eSocketNotifier::Priority );
 	CONNECT(in->activated, eConsoleContainer::readyRead);
 	CONNECT(out->activated, eConsoleContainer::readyWrite);
@@ -246,7 +246,7 @@ void eConsoleContainer::readyRead(int what)
 			if ( filefd[1] >= 0 )
 			{
 				ssize_t ret = ::write(filefd[1], buf, rd);
-				if (ret < 0) eDebug("[ServiceApp][eConsoleContainer] write failed: %m");
+				if (ret < 0) eDebug("[ServiceApp][eConsoleContainer]1 write failed: %m");
 			}
 			if (!hungup)
 				break;
@@ -308,7 +308,7 @@ void eConsoleContainer::readyWrite(int what)
 		int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
 		if (wr < 0)
 		{
-			eDebug("[ServiceApp][eConsoleContainer] write on fd=%d failed: %m", fd[1]);
+			/* eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]); */
 			outbuf.pop();
 			delete [] d.data;
 			if ( filefd[0] == -1 )
