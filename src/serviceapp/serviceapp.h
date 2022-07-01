@@ -44,11 +44,11 @@ class eServiceApp: public sigc::trackable,
 	eServiceAppOptions *options;
 	PlayerBackend *player;
 	BasePlayer *extplayer;
-	ResolveUrl *m_resolver;
+//	ResolveUrl *m_resolver;
 	std::string cmd;
-	std::string m_resolve_uri;
+//	std::string m_resolve_uri;
 
-	bool m_event_started;
+//	bool m_event_started;
 	bool m_paused;
 	int m_framerate, m_width, m_height, m_progressive;
 
@@ -80,7 +80,7 @@ class eServiceApp: public sigc::trackable,
 	void pullSubtitles();
 	void pushSubtitles();
 	void signalEventUpdatedInfo();
-	void urlResolved(int success);
+//	void urlResolved(int success);
 
 #ifdef HAVE_EPG
 	ePtr<eTimer> m_nownext_timer;

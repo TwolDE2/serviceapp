@@ -210,9 +210,9 @@ eServiceApp::eServiceApp(eServiceReference ref):
 	m_subservices_checked(false),
 	player(0),
 	extplayer(0),
-	m_resolver(0),
+	/* m_resolver(0),
 	m_resolve_uri("resolve://"),
-	m_event_started(false),
+	m_event_started(false), */
 	m_paused(false),
 	m_framerate(-1),
 	m_width(-1),
@@ -577,7 +577,7 @@ void eServiceApp::signalEventUpdatedInfo()
 {
 	eDebug("eServiceApp::signalEventUpdatedInfo");
     m_event(this, evUpdatedInfo);
-}
+/* }
 
 void eServiceApp::urlResolved(int success)
 {
@@ -589,7 +589,7 @@ void eServiceApp::urlResolved(int success)
 		start();
 	}
 	else
-		stop();
+		stop(); */
 }
 
 void eServiceApp::gotExtPlayerMessage(int message)
@@ -598,6 +598,8 @@ void eServiceApp::gotExtPlayerMessage(int message)
 	{
 		case PlayerMessage::start:
 			eDebug("eServiceApp::gotExtPlayerMessage - start");
+			m_event(this, evUpdatedEventInfo);
+			m_event(this, evStart);			
 			m_event_updated_info_timer->start(1000, true);
 #ifdef HAVE_EPG
 			updateEpgCacheNowNext();
@@ -680,28 +682,28 @@ RESULT eServiceApp::connectEvent(const sigc::slot<void(iPlayableService*,int)>& 
 
 RESULT eServiceApp::start()
 {
-	if (!m_event_started)
+/*	if (!m_event_started)
 	{
 		m_event(this, evUpdatedEventInfo);
 		m_event(this, evStart);
 		m_event_started = true;
-	}
+	}   */
 	std::string path_str(m_ref.path);
-
+/*
 	if (path_str.find(m_resolve_uri) == 0)
 	{
 		m_resolver = new ResolveUrl(m_ref.path.substr(m_resolve_uri.size()));
 		CONNECT(m_resolver->urlResolved, eServiceApp::urlResolved);
 		m_resolver->start();
 		return 0;
-	}
+	}   */
 	HeaderMap headers = getHttpHeaders(m_ref.path);
 	if (options->HLSExplorer && options->autoSelectStream)
 	{
 		if (!m_subservices_checked)
 		{
 			fillSubservices();
-			m_event(this, evUpdatedEventInfo);
+			// m_event(this, evUpdatedEventInfo);
 			m_subservices_checked = true;
 		}
 		size_t subservice_num = m_subservice_vec.size();
@@ -762,7 +764,7 @@ RESULT eServiceApp::start()
 RESULT eServiceApp::stop()
 {
 	eDebug("eServiceApp::stop");
-	if (m_resolver) m_resolver->stop();
+	// if (m_resolver) m_resolver->stop();
 	player->stop();
 	return 0;
 }
@@ -1120,8 +1122,9 @@ RESULT eServiceApp::getSubtitleList(std::vector<struct SubtitleTrack> &subtitlel
 // __iSubservices
 int eServiceApp::getNumberOfSubservices()
 {
-	std::string path_str(m_ref.path);
-	if (options->HLSExplorer && path_str.find(m_resolve_uri) && !m_subservices_checked)
+	if (options->HLSExplorer && !m_subservices_checked)
+	/* std::string path_str(m_ref.path);
+	if (options->HLSExplorer && path_str.find(m_resolve_uri) && !m_subservices_checked)  */
 	{
 		fillSubservices();
 		m_subservices_checked = true;
