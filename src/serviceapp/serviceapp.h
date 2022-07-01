@@ -9,7 +9,6 @@
 #include "message.h"
 #include "common.h"
 #include "extplayer.h"
-#include "scriptrun.h"
 #include "m3u8.h"
 
 struct eServiceAppOptions
