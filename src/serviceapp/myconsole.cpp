@@ -304,6 +304,7 @@ void eConsoleContainer::readyWrite(int what)
 {
 	if (what&eSocketNotifier::Write && outbuf.size() )
 	{
+		queue_data &d = outbuf.front();
 		if (fd[1] == -1)
 		{
 			eDebug("[ServiceApp][eConsoleContainer]1 found closed fd=%d", fd[1]);
@@ -314,7 +315,6 @@ void eConsoleContainer::readyWrite(int what)
 		}
 		else		
 		{		
-			queue_data &d = outbuf.front();
 			int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
 			if (wr < 0)
 			{
