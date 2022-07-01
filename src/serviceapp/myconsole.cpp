@@ -241,8 +241,8 @@ void eConsoleContainer::readyRead(int what)
 		while((rd = read(fd[0], buf, buffer.size()-1)) > 0)
 		{
 			buf[rd]=0;
-			/*emit*/ dataAvail(std::make_pair(buf, rd));
-			stderrAvail(std::make_pair(buf, rd));			
+			/*emit*/ dataAvail(buf);
+			stdoutAvail(buf);
 			if ( filefd[1] >= 0 )
 			{
 				ssize_t ret = ::write(filefd[1], buf, rd);
