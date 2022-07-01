@@ -95,8 +95,8 @@ int PlayerApp::processStart(eMainloop *context)
 {
 	console = new eConsoleContainer();
 	CONNECT(console->appClosed, PlayerApp::appClosed);
-	CONNECT(console->stdoutAvail, PlayerApp::stdoutAvail);
-	CONNECT(console->stderrAvail, PlayerApp::stderrAvail);
+	CONNECT(console->stdoutAvail(std::pair), PlayerApp::stdoutAvail);
+	CONNECT(console->stderrAvail(std::pair), PlayerApp::stderrAvail);
 	const std::vector<std::string> args = buildCommand();
 	eDebugNoNewLine("PlayerApp::processStart: ");
 	char **cargs = (char **) malloc(sizeof(char *) * args.size()+1);
