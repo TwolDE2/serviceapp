@@ -304,25 +304,36 @@ void eConsoleContainer::readyWrite(int what)
 {
 	if (what&eSocketNotifier::Write && outbuf.size() )
 	{
-		queue_data &d = outbuf.front();
-		int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
-		if (wr < 0)
+		if (fd[1] == -1)
 		{
-			/* eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]); */
+			eDebug("[ServiceApp][eConsoleContainer]1 found closed fd=%d", fd[1]);
 			outbuf.pop();
 			delete [] d.data;
 			if ( filefd[0] == -1 )
-			/* emit */ dataSent(0);
-		}			
-		else
-			d.dataSent += wr;
-		if (d.dataSent == d.len)
-		{
-			outbuf.pop();
-			delete [] d.data;
-			if ( filefd[0] == -1 )
-			/* emit */ dataSent(0);
+			/* emit */ dataSent(0);								
 		}
+		else		
+		{		
+			queue_data &d = outbuf.front();
+			int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
+			if (wr < 0)
+			{
+				/* eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]); */
+				outbuf.pop();
+				delete [] d.data;
+				if ( filefd[0] == -1 )
+				/* emit */ dataSent(0);
+			}			
+			else
+				d.dataSent += wr;
+			if (d.dataSent == d.len)
+			{
+				outbuf.pop();
+				delete [] d.data;
+				if ( filefd[0] == -1 )
+				/* emit */ dataSent(0);
+			}
+		}			
 	}
 	if ( !outbuf.size() )
 	{
