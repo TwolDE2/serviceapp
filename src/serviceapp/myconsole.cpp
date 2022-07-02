@@ -318,7 +318,7 @@ void eConsoleContainer::readyWrite(int what)
 			int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
 			if (wr < 0)
 			{
-				/* eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]); */
+				eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]);
 				outbuf.pop();
 				delete [] d.data;
 				if ( filefd[0] == -1 )
