@@ -228,13 +228,13 @@ eServiceApp::eServiceApp(eServiceReference ref):
 {	
 	int tmp_fd = -1;
 	tmp_fd = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
-	eDebug("[ServiceApp][PlayerSetup]  Opened tmp_fd: %d", tmp_fd); */
+	eDebug("[ServiceApp][PlayerSetup]  Opened tmp_fd: %d", tmp_fd);
 	if (tmp_fd == 0)
 	{
 		::close(tmp_fd);
 		tmp_fd = -1;	
 		fd0lock = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
-		eDebug("[ServiceApp][PlayerSetup] opening null fd returned: %d", fd0lock); */
+		eDebug("[ServiceApp][PlayerSetup] opening null fd returned: %d", fd0lock);
 	}
 	if (tmp_fd != -1)
 	{
