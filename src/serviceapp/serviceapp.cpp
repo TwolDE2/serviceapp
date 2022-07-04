@@ -240,8 +240,6 @@ eServiceApp::eServiceApp(eServiceReference ref):
 	{
 		::close(tmp_fd);
 	}
-}	
-{
 	options = createOptions(ref);
 	extplayer = createPlayer(ref, getHeaders(ref.path));
 	player = new PlayerBackend(extplayer);
