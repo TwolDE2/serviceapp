@@ -115,15 +115,16 @@ int eConsoleContainer::execute(eMainloop *context, const char *cmdline, const ch
 	// get one read, one write and the err pipe to the prog..
 	pid = bidirpipe(fd, cmdline, argv, m_cwd.empty() ? 0 : m_cwd.c_str());
 
-	if ( pid == -1 ) {
+	if ( pid == -1 )
+	{
 		eDebug("[ServiceApp][eConsoleContainer] failed to start %s", cmdline);
 		return -3;
 	}
 
 	eDebug("[ServiceApp][eConsoleContainer] pipe in = %d, out = %d, err = %d", fd[0], fd[1], fd[2]);
-	int flags = fcntl(fd[1], F_GETFL, 0);
+
 	::fcntl(fd[0], F_SETFL, O_NONBLOCK);
-	::fcntl(fd[1], F_SETFL, flags | O_NONBLOCK);
+	::fcntl(fd[1], F_SETFL, O_NONBLOCK);
 	::fcntl(fd[2], F_SETFL, O_NONBLOCK);
 	in = eSocketNotifier::create(context, fd[0], eSocketNotifier::Read|eSocketNotifier::Priority|eSocketNotifier::Hungup );
 	out = eSocketNotifier::create(context, fd[1], eSocketNotifier::Write, false);
@@ -286,7 +287,7 @@ void eConsoleContainer::readyErrRead(int what)
 				eDebug("[ServiceApp][eConsoleContainer] %d = %c (%02x)", i, buf[i], buf[i] );
 			buf[rd]=0;
 			/*emit*/ dataAvail(buf);
-			stdoutAvail(buf);
+			stderrAvail(buf);
 		}
 	}
 }
@@ -311,7 +312,7 @@ void eConsoleContainer::readyWrite(int what)
 			outbuf.pop();
 			delete [] d.data;
 			if ( filefd[0] == -1 )
-			/* emit */ dataSent(0);								
+			/* emit */ dataSent(0);
 		}
 		else		
 		{		
