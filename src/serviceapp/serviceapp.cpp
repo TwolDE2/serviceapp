@@ -19,6 +19,7 @@
 #include "serviceapp.h"
 #include "gstplayer.h"
 #include "exteplayer3.h"
+#include "myconsole.h"
 
 #include <Python.h>
 
@@ -206,6 +207,7 @@ RESULT eServiceFactoryApp::offlineOperations(const eServiceReference &ref, ePtr<
 DEFINE_REF(eServiceApp);
 
 eServiceApp::eServiceApp(eServiceReference ref):
+	int fd0lock = -1;
 	m_ref(ref),
 	m_subservices_checked(false),
 	player(0),
@@ -224,6 +226,20 @@ eServiceApp::eServiceApp(eServiceReference ref):
 	m_prev_subtitle_fps(1),
 	m_prev_decoder_time(-1),
 	m_decoder_time_valid_state(0)
+	int tmp_fd = -1;
+	tmp_fd = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
+	eDebug("[ServiceApp][PlayerSetup]  Opened tmp_fd: %d", tmp_fd); */
+	if (tmp_fd == 0)
+	{
+		::close(tmp_fd);
+		tmp_fd = -1;	
+		fd0lock = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
+		eDebug("[ServiceApp][PlayerSetup] opening null fd returned: %d", fd0lock); */
+	}
+	if (tmp_fd != -1)
+	{
+		::close(tmp_fd);
+	}
 {
 	options = createOptions(ref);
 	extplayer = createPlayer(ref, getHeaders(ref.path));

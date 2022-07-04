@@ -283,8 +283,8 @@ void eConsoleContainer::readyErrRead(int what)
 		int rd;
 		while((rd = read(fd[2], buf, buffer.size()-1)) > 0)
 		{
-			for ( int i = 0; i < rd; i++ )
-				eDebug("[ServiceApp][eConsoleContainer] %d = %c (%02x)", i, buf[i], buf[i] );
+/*			for ( int i = 0; i < rd; i++ )
+				eDebug("[eConsoleAppContainer] %d = %c (%02x)", i, buf[i], buf[i] );*/
 			buf[rd]=0;
 			/*emit*/ dataAvail(buf);
 			stderrAvail(buf);
@@ -306,35 +306,24 @@ void eConsoleContainer::readyWrite(int what)
 	if (what&eSocketNotifier::Write && outbuf.size() )
 	{
 		queue_data &d = outbuf.front();
-		if (fd[1] == -1)
+		int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
+		if (wr < 0)
 		{
-			eDebug("[ServiceApp][eConsoleContainer]1 found closed fd=%d", fd[1]);
+			eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]);
+			outbuf.pop();
+			delete [] d.data;
+			if ( filefd[0] == -1 )
+			/* emit */ dataSent(0);
+		}			
+		else
+			d.dataSent += wr;
+		if (d.dataSent == d.len)
+		{
 			outbuf.pop();
 			delete [] d.data;
 			if ( filefd[0] == -1 )
 			/* emit */ dataSent(0);
 		}
-		else		
-		{		
-			int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
-			if (wr < 0)
-			{
-				eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]);
-				outbuf.pop();
-				delete [] d.data;
-				if ( filefd[0] == -1 )
-				/* emit */ dataSent(0);
-			}			
-			else
-				d.dataSent += wr;
-			if (d.dataSent == d.len)
-			{
-				outbuf.pop();
-				delete [] d.data;
-				if ( filefd[0] == -1 )
-				/* emit */ dataSent(0);
-			}
-		}			
 	}
 	if ( !outbuf.size() )
 	{
