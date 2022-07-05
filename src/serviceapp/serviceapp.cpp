@@ -19,8 +19,6 @@
 #include "serviceapp.h"
 #include "gstplayer.h"
 #include "exteplayer3.h"
-#include "myconsole.h"
-
 #include <Python.h>
 
 enum
@@ -226,20 +224,6 @@ eServiceApp::eServiceApp(eServiceReference ref):
 	m_prev_decoder_time(-1),
 	m_decoder_time_valid_state(0)
 {	
-	int tmp_fd = -1;
-	tmp_fd = ::open("/dev/console", O_RDONLY | O_CLOEXEC);
-	eDebug("[ServiceApp][PlayerSetup]  Opened tmp_fd: %d", tmp_fd);
-	if (tmp_fd == 0)
-	{
-		::close(tmp_fd);
-		tmp_fd = -1;	
-		fd0lock = ::open("/dev/console", O_RDONLY | O_CLOEXEC);
-		eDebug("[ServiceApp][PlayerSetup] opening null fd returned: %d", fd0lock);
-	}
-	if (tmp_fd != -1)
-	{
-		::close(tmp_fd);
-	}
 	options = createOptions(ref);
 	extplayer = createPlayer(ref, getHeaders(ref.path));
 	player = new PlayerBackend(extplayer);
