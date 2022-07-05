@@ -14,25 +14,30 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 	int pfdin[2];  /* from child to parent */
 	int pfdout[2]; /* from parent to child */
 	int pfderr[2]; /* stderr from child to parent */
+	int pfdin1[2];  /* from child to parent */
+	int pfdout1[2]; /* from parent to child */
+	int pfderr1[2]; /* stderr from child to parent */	
 	int pid;       /* child's pid */
 
-	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1)
+	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
 		return(-1);
-
+	eDebug("[ServiceApp][eConsoleContainer][bidirpipe]1 pipe in1 = %d, pipe in2 = %d, out1 = %d, out2 = %d, err1 = %d, err2 = %d", pfdin[0], pfdin[1], pfdout[0], pfdout[1], pfderr[0], pfderr[1]);
+	eDebug("[ServiceApp][eConsoleContainer][bidirpipe]2 pipe in1 = %d, pipe in2 = %d, out1 = %d, out2 = %d, err1 = %d, err2 = %d", pfdin1[0], pfdin1[1], pfdout1[0], pfdout1[1], pfderr1[0], pfderr1[1]);	
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
 	else if (pid == 0) /* child process */
 	{
 		setsid();
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]3 close 0,1,2 exit");		
 			_exit(0);
 
 		if (dup(pfdout[0]) != 0 || dup(pfdin[1]) != 1 || dup(pfderr[1]) != 2 )
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]4 dup exit");		
 			_exit(0);
 
-		if (close(pfdout[0]) == -1 || close(pfdout[1]) == -1 ||
-				close(pfdin[0]) == -1 || close(pfdin[1]) == -1 ||
-				close(pfderr[0]) == -1 || close(pfderr[1]) == -1 )
+		if (close(pfdout[0]) == -1 || close(pfdout[1]) == -1 || close(pfdin[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[0]) == -1 || close(pfderr[1]) == -1 )
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]5 close all fd exit");		
 			_exit(0);
 
 		for (unsigned int i=3; i < 90; ++i )
@@ -47,6 +52,7 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 		_exit(0);
 	}
 	if (close(pfdout[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[1]) == -1)
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]6 close selected fd exit");	
 			return(-1);
 
 	pfd[0] = pfdin[0];
