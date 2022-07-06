@@ -11,59 +11,57 @@
 
 int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char *cwd )
 {
-	int pfdin[2];  /* from child to parent */
-	int pfdout[2]; /* from parent to child */
-	int pfderr[2]; /* stderr from child to parent */
 	int pfdin1[2];  /* from child to parent */
 	int pfdout1[2]; /* from parent to child */
-	int pfderr1[2]; /* stderr from child to parent */	
+	int pfderr1[2]; /* stderr from child to parent */
+	int pfdin11[2];  /* from child to parent */
+	int pfdout11[2]; /* from parent to child */
+	int pfderr11[2]; /* stderr from child to parent */	
 	int pid;       /* child's pid */
-	int duppfdin;       /* dup pfdin[1] */	
-	int duppfdout;       /* dup pfdout[0] */
-	int duppfderr;       /* dup pfderr[1] */		
+	int pfddupin1;       /* dup pfdin1[1] */	
+	int pfddupout1;       /* dup pfdout1[0] */
+	int pfdduperr1;       /* dup pfderr1[1] */		
 
-	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
+	if ( pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1 || pipe(pfdin11) == -1 || pipe(pfdout11) == -1 || pipe(pfderr11) == -1)
 		return(-1);
-	printf ("[ServiceApp][eConsoleContainer][bidirpipe]1 pipe in1 = %d, in2 = %d, out1 = %d, out2 = %d, err1 = %d, err2 = %d", pfdin[0], pfdin[1], pfdout[0], pfdout[1], pfderr[0], pfderr[1]);
-	printf ("[ServiceApp][eConsoleContainer][bidirpipe]2 pipe in1 = %d, in2 = %d, out1 = %d, out2 = %d, err1 = %d, err2 = %d", pfdin1[0], pfdin1[1], pfdout1[0], pfdout1[1], pfderr1[0], pfderr1[1]);	
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
 	else if (pid == 0) /* child process */
 	{
 		setsid();
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
-			printf ("[ServiceApp][eConsoleContainer][bidirpipe]3 close 0,1,2 exit");		
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]3 close 0,1,2 exit");		
 			_exit(0);
-		duppfdin = dup(pfdin[1]);
-		duppfdout = dup(pfdout[0]);
-		duppfderr = dup(pfderr[1]);
-		printf ("[ServiceApp][eConsoleContainer][bidirpipe]4 dup in = %d, out = %d, err = %d", duppfdin, duppfdout, duppfderr);		
-		if (duppfdout != 0 || duppfdin != 1 || duppfderr != 2 )
-			printf ("[ServiceApp][eConsoleContainer][bidirpipe]5 dup exit");		
+		pfddupin1 = dup(pfdin1[1]);
+		pfddupout1 = dup(pfdout1[0]);
+		pfdduperr1 = dup(pfderr1[1]);
+		eDebug("[ServiceApp][eConsoleContainer][bidirpipe]4 dup in = %d, out = %d, err = %d", pfddupin1, pfddupout1, pfdduperr1);		
+		if (pfddupout1 != 0 || pfddupin1 != 1 || pfdduperr1 != 2 )
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]5 dup exit");		
 			_exit(0);
 
-		if (close(pfdout[0]) == -1 || close(pfdout[1]) == -1 || close(pfdin[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[0]) == -1 || close(pfderr[1]) == -1 )
-			printf ("[ServiceApp][eConsoleContainer][bidirpipe]6 close all fd exit");		
+		if (close(pfdout1[0]) == -1 || close(pfdout1[1]) == -1 || close(pfdin1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[0]) == -1 || close(pfderr1[1]) == -1 )
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]6 close all fd exit");		
 			_exit(0);
 
 		for (unsigned int i=3; i < 90; ++i )
 			close(i);
 
 		if (cwd && chdir(cwd) < 0)
-			printf ("[ServiceApp][eConsoleContainer] failed to change directory to %s (%m)", cwd);
+			eDebug("[ServiceApp][eConsoleContainer] failed to change directory to %s (%m)", cwd);
 
 		execvp(cmd, (char * const *)argv);
 			/* the vfork will actually suspend the parent thread until execvp is called. thus it's ok to use the shared arg/cmdline pointers here. */
-		printf ("[ServiceApp][eConsoleContainer] Finished %s", cmd);
+		eDebug("[ServiceApp][eConsoleContainer] Finished %s", cmd);
 		_exit(0);
 	}
-	if (close(pfdout[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[1]) == -1)
-			printf ("[ServiceApp][eConsoleContainer][bidirpipe]7 close selected fd exit");	
+	if (close(pfdout1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[1]) == -1)
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]7 close selected fd exit");	
 			return(-1);
 
-	pfd[0] = pfdin[0];
-	pfd[1] = pfdout[1];
-	pfd[2] = pfderr[0];
+	pfd[0] = pfdin1[0];
+	pfd[1] = pfdout1[1];
+	pfd[2] = pfderr1[0];
 
 	return(pid);
 }
