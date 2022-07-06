@@ -18,9 +18,8 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 	int pid;       /* child's pid */
 
-	if ( pipe(pfddummy) == -1 || pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 )
+	if ( pipe(pfddummy) == -1 || ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 )
 		return(-1);
-
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
 	else if (pid == 0) /* child process */
