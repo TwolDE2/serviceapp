@@ -133,7 +133,7 @@ int eConsoleContainer::execute(eMainloop *context, const char *cmdline, const ch
 	{
 		::close(tmp_fd);
 	}
-	// get one read, one write and the err pipe to the prog..
+	/* get one read, one write and the err pipe to the prog..  */
 	pid = bidirpipe(fd, cmdline, argv, m_cwd.empty() ? 0 : m_cwd.c_str());
 
 	if ( pid == -1 )
@@ -257,7 +257,7 @@ void eConsoleContainer::readyRead(int what)
 	bool hungup = what & eSocketNotifier::Hungup;
 	if (what & (eSocketNotifier::Priority|eSocketNotifier::Read))
 	{
-		eDebug("[ServiceApp][eConsoleContainer] readyRead what = %d", what);
+/*		eDebug("[ServiceApp][eConsoleContainer] readyRead what = %d", what);  */
 		char* buf = &buffer[0];
 		int rd;
 		while((rd = read(fd[0], buf, buffer.size()-1)) > 0)
@@ -299,13 +299,13 @@ void eConsoleContainer::readyErrRead(int what)
 {
 	if (what & (eSocketNotifier::Priority|eSocketNotifier::Read))
 	{
-		eDebug("[ServiceApp][eConsoleContainer] readyErrRead what = %d", what);
+/*		eDebug("[ServiceApp][eConsoleContainer] readyErrRead what = %d", what);  */
 		char* buf = &buffer[0];
 		int rd;
 		while((rd = read(fd[2], buf, buffer.size()-1)) > 0)
 		{
 /*			for ( int i = 0; i < rd; i++ )
-				eDebug("[eConsoleAppContainer] %d = %c (%02x)", i, buf[i], buf[i] );*/
+				eDebug("[eConsoleAppContainer] %d = %c (%02x)", i, buf[i], buf[i] );  */
 			buf[rd]=0;
 			/*emit*/ dataAvail(buf);
 			stderrAvail(buf);
@@ -330,7 +330,7 @@ void eConsoleContainer::readyWrite(int what)
 		int wr = ::write( fd[1], d.data+d.dataSent, d.len-d.dataSent );
 		if (wr < 0)
 		{
-			eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]);
+/*			eDebug("[ServiceApp][eConsoleContainer]2 write on fd=%d failed: %m", fd[1]);  */
 			outbuf.pop();
 			delete [] d.data;
 			if ( filefd[0] == -1 )
@@ -359,7 +359,7 @@ void eConsoleContainer::readyWrite(int what)
 				close(filefd[0]);
 				filefd[0] = -1;
 				::close(fd[1]);
-				eDebug("[ServiceApp][eConsoleContainer] readFromFile done - closing stdin pipe");
+/*				eDebug("[ServiceApp][eConsoleContainer] readFromFile done - closing stdin pipe");  */
 				fd[1]=-1;
 				dataSent(0);
 				out->stop();
