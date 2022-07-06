@@ -11,18 +11,18 @@
 
 int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char *cwd )
 {
+	int pfdin[2];  /* from child to parent */
+	int pfdout[2]; /* from parent to child */
+	int pfderr[2]; /* stderr from child to parent */
 	int pfdin1[2];  /* from child to parent */
 	int pfdout1[2]; /* from parent to child */
-	int pfderr1[2]; /* stderr from child to parent */
-	int pfdin11[2];  /* from child to parent */
-	int pfdout11[2]; /* from parent to child */
-	int pfderr11[2]; /* stderr from child to parent */	
+	int pfderr1[2]; /* stderr from child to parent */	
 	int pid;       /* child's pid */
 	int pfddupin1;       /* dup pfdin1[1] */	
 	int pfddupout1;       /* dup pfdout1[0] */
 	int pfdduperr1;       /* dup pfderr1[1] */		
 
-	if ( pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1 || pipe(pfdin11) == -1 || pipe(pfdout11) == -1 || pipe(pfderr11) == -1)
+	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
 		return(-1);
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
@@ -30,18 +30,16 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 	{
 		setsid();
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
-			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]3 close 0,1,2 exit");		
 			_exit(0);
+
 		pfddupin1 = dup(pfdin1[1]);
 		pfddupout1 = dup(pfdout1[0]);
 		pfdduperr1 = dup(pfderr1[1]);
-		eDebug("[ServiceApp][eConsoleContainer][bidirpipe]4 dup in = %d, out = %d, err = %d", pfddupin1, pfddupout1, pfdduperr1);		
+		
 		if (pfddupout1 != 0 || pfddupin1 != 1 || pfdduperr1 != 2 )
-			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]5 dup exit");		
 			_exit(0);
 
 		if (close(pfdout1[0]) == -1 || close(pfdout1[1]) == -1 || close(pfdin1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[0]) == -1 || close(pfderr1[1]) == -1 )
-			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]6 close all fd exit");		
 			_exit(0);
 
 		for (unsigned int i=3; i < 90; ++i )
