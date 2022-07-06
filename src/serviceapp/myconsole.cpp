@@ -37,7 +37,7 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 		duppfdin == dup(pfdin[1]);
 		duppfdout == dup(pfdout[0]);
 		duppfderr == dup(pfderr[1]);
-		eDebug("[ServiceApp][eConsoleContainer][bidirpipe]4 dup in = %d, out = %d, err = %d", duppfdin, duppfdout, duppfderr pfdout1[1], pfderr1[0], pfderr1[1]);		
+		eDebug("[ServiceApp][eConsoleContainer][bidirpipe]4 dup in = %d, out = %d, err = %d", duppfdin, duppfdout, duppfderr);		
 		if duppfdout != 0 || duppfdin != 1 || duppfderr != 2 )
 			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]5 dup exit");		
 			_exit(0);
