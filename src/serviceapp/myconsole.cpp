@@ -17,13 +17,13 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 	int pfdin1[2];  /* from child to parent */
 	int pfdout1[2]; /* from parent to child */
-	int pfderr1[2]; /* stderr from child to parent */	
+	int pfderr1[2]; /* stderr from child to parent */
 
 	int pid;       /* child's pid */
 
-	int pfddupin1;       /* dup pfdin1[1] */	
+	int pfddupin1;       /* dup pfdin1[1] */
 	int pfddupout1;       /* dup pfdout1[0] */
-	int pfdduperr1;       /* dup pfderr1[1] */		
+	int pfdduperr1;       /* dup pfderr1[1] */
 
 	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
 		return(-1);
@@ -121,7 +121,7 @@ int eConsoleContainer::execute(eMainloop *context, const char *cmdline, const ch
 	killstate=0;
 	int tmp_fd = -1;
 	tmp_fd = ::open("/dev/console", O_RDONLY | O_CLOEXEC);
-	eDebug("[ServiceApp][myconsole]  Opened tmp_fd: %d", tmp_fd);
+	eDebug("[ServiceApp][eConsoleContainer]  Opened tmp_fd: %d", tmp_fd);
 	if (tmp_fd == 0)
 	{
 		::close(tmp_fd);
