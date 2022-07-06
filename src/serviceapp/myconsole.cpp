@@ -14,10 +14,13 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 	int pfdin[2];  /* from child to parent */
 	int pfdout[2]; /* from parent to child */
 	int pfderr[2]; /* stderr from child to parent */
+
 	int pfdin1[2];  /* from child to parent */
 	int pfdout1[2]; /* from parent to child */
 	int pfderr1[2]; /* stderr from child to parent */	
+
 	int pid;       /* child's pid */
+
 	int pfddupin1;       /* dup pfdin1[1] */	
 	int pfddupout1;       /* dup pfdout1[0] */
 	int pfdduperr1;       /* dup pfderr1[1] */		

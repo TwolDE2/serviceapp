@@ -223,7 +223,7 @@ eServiceApp::eServiceApp(eServiceReference ref):
 	m_prev_subtitle_fps(1),
 	m_prev_decoder_time(-1),
 	m_decoder_time_valid_state(0)
-{	
+{
 	options = createOptions(ref);
 	extplayer = createPlayer(ref, getHeaders(ref.path));
 	player = new PlayerBackend(extplayer);
@@ -593,7 +593,7 @@ void eServiceApp::urlResolved(int success)
 
 void eServiceApp::gotExtPlayerMessage(int message)
 {
-	eDebug("eServiceApp::gotExtPlayerMessage - message = %d", message);
+	// eDebug("eServiceApp::gotExtPlayerMessage - message = %d", message);
 	switch (message)
 	{
 		case PlayerMessage::start:
