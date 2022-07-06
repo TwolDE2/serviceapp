@@ -53,11 +53,9 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 		execvp(cmd, (char * const *)argv);
 			/* the vfork will actually suspend the parent thread until execvp is called. thus it's ok to use the shared arg/cmdline pointers here. */
-		eDebug("[ServiceApp][eConsoleContainer] Finished %s", cmd);
 		_exit(0);
 	}
 	if (close(pfdout1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[1]) == -1)
-			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]7 close selected fd exit");	
 			return(-1);
 
 	pfd[0] = pfdin1[0];
