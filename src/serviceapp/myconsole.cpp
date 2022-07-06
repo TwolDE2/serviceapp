@@ -11,14 +11,21 @@
 
 int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char *cwd )
 {
-	int pfddummy[2];  /* HiSilicon dummy */
 	int pfdin[2];  /* from child to parent */
 	int pfdout[2]; /* from parent to child */
 	int pfderr[2]; /* stderr from child to parent */
 
+	int pfdin1[2];  /* from child to parent */
+	int pfdout1[2]; /* from parent to child */
+	int pfderr1[2]; /* stderr from child to parent */	
+
 	int pid;       /* child's pid */
 
-	if ( pipe(pfddummy) == -1 || ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 )
+	int pfddupin1;       /* dup pfdin1[1] */	
+	int pfddupout1;       /* dup pfdout1[0] */
+	int pfdduperr1;       /* dup pfderr1[1] */		
+
+	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
 		return(-1);
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
@@ -28,10 +35,14 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
 			_exit(0);
 
-		if (dup(pfdout[0]) != 0 || dup(pfdin[1]) != 1 || dup(pfderr[1]) != 2 )
+		pfddupin1 = dup(pfdin1[1]);
+		pfddupout1 = dup(pfdout1[0]);
+		pfdduperr1 = dup(pfderr1[1]);
+		
+		if (pfddupout1 != 0 || pfddupin1 != 1 || pfdduperr1 != 2 )
 			_exit(0);
 
-		if (close(pfdout[0]) == -1 || close(pfdout[1]) == -1 || close(pfdin[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[0]) == -1 || close(pfderr[1]) == -1 )
+		if (close(pfdout1[0]) == -1 || close(pfdout1[1]) == -1 || close(pfdin1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[0]) == -1 || close(pfderr1[1]) == -1 )
 			_exit(0);
 
 		for (unsigned int i=3; i < 90; ++i )
@@ -42,14 +53,16 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 		execvp(cmd, (char * const *)argv);
 			/* the vfork will actually suspend the parent thread until execvp is called. thus it's ok to use the shared arg/cmdline pointers here. */
+		eDebug("[ServiceApp][eConsoleContainer] Finished %s", cmd);
 		_exit(0);
 	}
-	if (close(pfdout[0]) == -1 || close(pfdin[1]) == -1 || close(pfderr[1]) == -1)
+	if (close(pfdout1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[1]) == -1)
+			eDebug("[ServiceApp][eConsoleContainer][bidirpipe]7 close selected fd exit");	
 			return(-1);
 
-	pfd[0] = pfdin[0];
-	pfd[1] = pfdout[1];
-	pfd[2] = pfderr[0];
+	pfd[0] = pfdin1[0];
+	pfd[1] = pfdout1[1];
+	pfd[2] = pfderr1[0];
 
 	return(pid);
 }
