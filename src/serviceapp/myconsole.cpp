@@ -121,7 +121,7 @@ int eConsoleContainer::execute(eMainloop *context, const char *cmdline, const ch
 	killstate=0;
 	int tmp_fd = -1;
 	tmp_fd = ::open("/dev/console", O_RDONLY | O_CLOEXEC);
-	eDebug("[ServiceApp][PlayerSetup]  Opened tmp_fd: %d", tmp_fd);
+	eDebug("[ServiceApp][myconsole]  Opened tmp_fd: %d", tmp_fd);
 	if (tmp_fd == 0)
 	{
 		::close(tmp_fd);
