@@ -17,7 +17,6 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 	int pfderr[2]; /* stderr from child to parent */
 	int pid;       /* child's pid */
 
-
 	if ( pipe(pfddummy) == -1 || pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 )
 		return(-1);
 	if ( ( pid = vfork() ) == -1 )
@@ -28,7 +27,6 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
 			_exit(0);
 
-		
 		if (dup(pfdout[0]) != 0 || dup(pfdin[1]) != 1 || dup(pfderr[1]) != 2 )
 			_exit(0);
 
