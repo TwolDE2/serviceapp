@@ -21,9 +21,6 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 	int pid;       /* child's pid */
 
-	int pfddupin1;       /* dup pfdin1[1] */
-	int pfddupout1;       /* dup pfdout1[0] */
-	int pfdduperr1;       /* dup pfderr1[1] */
 
 	if ( pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 || pipe(pfdin1) == -1 || pipe(pfdout1) == -1 || pipe(pfderr1) == -1)
 		return(-1);
@@ -35,11 +32,8 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 		if ( close(0) == -1 || close(1) == -1 || close(2) == -1 )
 			_exit(0);
 
-		pfddupin1 = dup(pfdin1[1]);
-		pfddupout1 = dup(pfdout1[0]);
-		pfdduperr1 = dup(pfderr1[1]);
 		
-		if (pfddupout1 != 0 || pfddupin1 != 1 || pfdduperr1 != 2 )
+		if (dup(pfdout1[0]) != 0 || dup(pfdin1[1]) != 1 || dup(pfderr1[1]) != 2 )
 			_exit(0);
 
 		if (close(pfdout1[0]) == -1 || close(pfdout1[1]) == -1 || close(pfdin1[0]) == -1 || close(pfdin1[1]) == -1 || close(pfderr1[0]) == -1 || close(pfderr1[1]) == -1 )
