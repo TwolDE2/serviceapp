@@ -295,7 +295,7 @@ void eConsoleContainer::readyErrRead(int what)
 		while((rd = read(fd[2], buf, buffer.size()-1)) > 0)
 		{
 /*			for ( int i = 0; i < rd; i++ )
-				eDebug("[eConsoleAppContainer] %d = %c (%02x)", i, buf[i], buf[i] );  */
+				eDebug("[eConsoleContainer] %d = %c (%02x)", i, buf[i], buf[i] );  */
 			buf[rd]=0;
 			/*emit*/ dataAvail(buf);
 			stderrAvail(buf);
