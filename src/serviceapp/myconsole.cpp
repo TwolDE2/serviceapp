@@ -15,8 +15,6 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 	int pfdin[2];  /* from child to parent */
 	int pfdout[2]; /* from parent to child */
 	int pfderr[2]; /* stderr from child to parent */
-
-
 	int pid;       /* child's pid */
 
 
