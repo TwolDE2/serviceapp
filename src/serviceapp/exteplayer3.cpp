@@ -246,7 +246,7 @@ void ExtEplayer3::handleJsonOutput(cJSON *json)
 	}
 	const char *key = json->child->string;
 	cJSON* value = cJSON_GetObjectItem(json, key);
-	// eDebug("ExtEplayer3::handleJsonOutput: %s", key);
+/*	eDebug("ExtEplayer3::handleJsonOutput: %s", key);  */
 	if (!strcmp(key, "PLAYBACK_PLAY"))
 	{
 		if (!cJSON_GetObjectItem(value, "sts")->valueint)
