@@ -19,6 +19,7 @@ int bidirpipe(int pfd[], const char *cmd , const char * const argv[], const char
 
 	if ( pipe(pfddummy) == -1 || pipe(pfdin) == -1 || pipe(pfdout) == -1 || pipe(pfderr) == -1 )
 		return(-1);
+
 	if ( ( pid = vfork() ) == -1 )
 		return(-1);
 	else if (pid == 0) /* child process */
@@ -251,8 +252,8 @@ void eConsoleContainer::readyRead(int what)
 		while((rd = read(fd[0], buf, buffer.size()-1)) > 0)
 		{
 			buf[rd]=0;
-			/*emit*/ dataAvail(buf);
-			stdoutAvail(buf);
+			/*emit*/ dataAvail(std::make_pair(buf, rd));
+			stdoutAvail(std::make_pair(buf, rd));
 			if ( filefd[1] >= 0 )
 			{
 				ssize_t ret = ::write(filefd[1], buf, rd);
@@ -295,8 +296,8 @@ void eConsoleContainer::readyErrRead(int what)
 /*			for ( int i = 0; i < rd; i++ )
 				eDebug("[eConsoleContainer] %d = %c (%02x)", i, buf[i], buf[i] );  */
 			buf[rd]=0;
-			/*emit*/ dataAvail(buf);
-			stderrAvail(buf);
+			/*emit*/ dataAvail(std::make_pair(buf, rd));
+			stderrAvail(std::make_pair(buf, rd));
 		}
 	}
 }
