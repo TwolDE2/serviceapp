@@ -40,11 +40,11 @@ protected:
 template<class T>
 class eFixedMessagePump: public sigc::trackable
 {
+	eSingleLock lock;
 	ePtr<eSocketNotifier> sn;
 	std::queue<T> m_queue;
 	int m_pipe[2];
 	const char *name;
-	eSingleLock lock;
 	void do_recv(int)
 	{
 		char byte;
