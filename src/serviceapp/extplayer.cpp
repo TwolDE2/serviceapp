@@ -414,7 +414,6 @@ int PlayerBackend::videoGetTrackInfo(videoStream& trackInfo, int trackNum)
 
 void PlayerBackend::gotMessage(const PlayerBackend::Message& message)
 {
-/*	eDebug("PlayerBackend::gotMessage - message = %d", message.type);  */
 	switch (message.type)
 	{
 		case Message::tStart:

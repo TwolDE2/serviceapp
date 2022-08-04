@@ -594,7 +594,6 @@ void eServiceApp::urlResolved(int success)
 
 void eServiceApp::gotExtPlayerMessage(int message)
 {
-/*	eDebug("eServiceApp::gotExtPlayerMessage - message = %d", message);  */
 	switch (message)
 	{
 		case PlayerMessage::start:
