@@ -431,7 +431,8 @@ void PlayerBackend::gotMessage(const PlayerBackend::Message& message)
 			break;
 		case Message::tStop:
 			eDebug("PlayerBackend::gotMessage - tStop");
-			pPlayer->sendForceStop();
+			mTimer->stop();
+			pPlayer->sendStop();
 			break;
 		case Message::tKill:
 			eDebug("PlayerBackend::gotMessage - tKill");
@@ -470,7 +471,7 @@ void PlayerBackend::gotMessage(const PlayerBackend::Message& message)
 			pPlayer->sendUpdateSubtitleTracksList();
 			break;
 		case Message::tGetLength:
-			// eDebug("PlayerBackend::gotMessage - tGetLength");
+			eDebug("PlayerBackend::gotMessage - tGetLength");
 			pPlayer->sendUpdateLength();
 			break;
 		case Message::start:
