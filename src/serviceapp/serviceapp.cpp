@@ -905,8 +905,8 @@ RESULT eServiceApp::getTrackInfo(iAudioTrackInfo& trackInfo, unsigned int n)
 	std::map<std::string, std::string> audioReplacements = {
 		{"A_", ""},
 		{"EAC3", "AC3+"},
-		{"A_MPEG/L3", "MPEG2"},
-		{"IPCM", "AC3+"},
+		{"MPEG/L3", "AAC"},
+		{"IPCM", "AC3"},
 		{"LPCM", "AC3+"},
 		{"AAC_PLUS", "AAC+"},
 		{"AAC_LATM", "AAC"},
